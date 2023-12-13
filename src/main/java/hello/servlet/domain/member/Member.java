@@ -17,4 +17,7 @@ public class Member {
         this.username = username;
         this.age = age;
     }
+
+    public Member(String username, Number age) {
+    }
 }
