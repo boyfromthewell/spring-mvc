@@ -131,3 +131,30 @@ spring.mvc.view.suffix=.jsp
 5. view.render()
 * view.render() 가 호출되고 `InternalResourceView`는 forward() 를 사용해서 JSP를 실행
 
+***
+## 스프링 MVC 시작
+```java
+package hello.servlet.web.springmvc.v1;
+
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class SpringMemberFormControllerV1 {
+    @RequestMapping("/springmvc/v1/members/new-form")
+    public ModelAndView process() {
+        System.out.println("SpringMemberFormControllerV1.process");
+        return new ModelAndView("new-form");
+    }
+}
+```
+* @Controller
+  * 스프링이 자동으로 스프링 빈으로 등록
+  * 스프링 MVC에서 애노테이션 기반 컨트롤러로 인식
+* @RequestMapping
+  * 요청 정보를 매핑, 해당 URL이 호출되면 이 메서드가 호출, 애노테이션을 기반으로 동작해 메서드의 이름은 임의로 지어도 됨
+* ModelAndView
+  * 모델과 뷰 정보를 담아서 반환하면 됨
+
