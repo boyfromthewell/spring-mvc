@@ -88,3 +88,46 @@ public class MyHttpRequestHandler implements HttpRequestHandler {
 * 디스패쳐 서블릿이 조회한 `HttpRequestHandlerAdapter`를 실행하면서 핸들러 정보도 함께 넘겨줌
 * HttpRequestrHandlerAdapter는 핸들러인 `MyHttpRequestHandler`를 내부에서 실행, 그 결과를 반환
 
+## 뷰 리졸버
+```java
+package hello.servlet.web.springmvc.old;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+
+@Component("/springmvc/old-controller")
+public class OldController implements Controller {
+    @Override
+    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("OldController.handleRequest");
+        return new ModelAndView("new-form");
+    }
+}
+
+```
+application.properties에 다음을 추가
+```
+spring.mvc.view.prefix=/WEB-INF/views
+spring.mvc.view.suffix=.jsp
+```
+
+스프링 부트는 `InternalResourceViewResolver`라는 뷰 리졸버를 자동으로 등록하는데 이떄 `application.properties`에 등록한 설정 정보를 사용해서 등록
+
+1. 핸들러 어댑터 호출
+* 핸들러 어댑터를 통해 new-form 이라는 논리 뷰 이름을 획득
+2. ViewResolver 호출
+* new-form 이라는 뷰 이름으로 viewResolver를 순서대로 호출한다.
+* `BeanNameViewResolver` 는 `new-form` 이라는 이름의 스프링 빈으로 등록된 뷰를 찾아야 하는데 없음
+* `InternalResourceViewResolver` 가 호출
+
+3. InternalResourceViewResolver
+* 이 뷰 리졸버는 `InternalResourceView` 를 반환
+
+4. 뷰 - InternalResourceView
+* InternalResourceView 는 JSP처럼 포워드 forward() 를 호출해서 처리할 수 있는 경우에 사용
+5. view.render()
+* view.render() 가 호출되고 `InternalResourceView`는 forward() 를 사용해서 JSP를 실행
+
